@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Spin to Win ₱500</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .wheel {
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      border: 8px solid #4ade80;
+      position: relative;
+      animation: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      font-weight: bold;
+      background: conic-gradient(
+        #bbf7d0 0deg 90deg,
+        #86efac 90deg 180deg,
+        #4ade80 180deg 270deg,
+        #22c55e 270deg 360deg
+      );
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(1440deg); }
+    }
+
+    @keyframes floatUpLoop {
+      0% { transform: translateY(100vh); opacity: 0; }
+      50% { opacity: 1; }
+      100% { transform: translateY(-200px); opacity: 0; }
+    }
+
+    .float-up-loop {
+      animation: floatUpLoop 6s linear infinite;
+    }
+
+    @keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(7200deg); } /* 20 full spins */
+}
+
+
+    .firework {
+      width: 20px;
+      height: 20px;
+      border-radius: 9999px;
+      position: absolute;
+      animation: firework 1.5s ease-out infinite;
+    }
+
+    .delay-1 { animation-delay: 0.5s; }
+    .delay-2 { animation-delay: 1s; }
+    .delay-3 { animation-delay: 1.5s; }
+    .delay-4 { animation-delay: 2s; }
+  </style>
+</head>
+<body class="bg-green-100 flex items-center justify-center min-h-screen overflow-hidden">
+
+  <div class="text-center z-10">
+    <h1 class="text-3xl font-bold mb-6">🎉 Spin the Wheel to Win ₱500 to ₱100 000 000 !!!</h1>
+    <div id="wheel" class="wheel mx-auto mb-6">🎁</div>
+    <button onclick="spinWheel()" id="spinBtn"
+      class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-lg">
+      Spin
+    </button>
+    <p id="result" class="mt-4 text-xl font-semibold text-green-700 hidden"></p>
+
+    <a href="{% url 'login' %}" id="loginLink"
+      class="hidden mt-6 inline-block bg-blue-600 hover:bg-blue-700 text-white text-xl font-bold py-3 px-6 rounded-lg shadow-lg transition duration-300">
+      🔐 Log in to Withdraw
+    </a>
+  </div>
+
+  <!-- Celebration Effects: Hidden by Default -->
+  <div id="celebration" class="hidden fixed inset-0 pointer-events-none z-0">
+    <!-- Balloons -->
+    <div class="absolute bottom-0 left-[20%] w-8 h-20 bg-red-400 rounded-full float-up-loop"></div>
+    <div class="absolute bottom-0 left-[40%] w-8 h-20 bg-yellow-400 rounded-full float-up-loop delay-1"></div>
+    <div class="absolute bottom-0 left-[60%] w-8 h-20 bg-blue-400 rounded-full float-up-loop delay-2"></div>
+    <div class="absolute bottom-0 left-[80%] w-8 h-20 bg-pink-400 rounded-full float-up-loop delay-3"></div>
+
+    <!-- Fireworks -->
+    <div class="firework bg-red-500 top-[30%] left-[20%] delay-1"></div>
+    <div class="firework bg-yellow-500 top-[25%] left-[70%] delay-2"></div>
+    <div class="firework bg-purple-500 top-[50%] left-[40%] delay-3"></div>
+    <div class="firework bg-blue-500 top-[40%] left-[60%] delay-4"></div>
+  </div>
+
+  <script>
+function spinWheel() {
+  const wheel = document.getElementById('wheel');
+  const resultText = document.getElementById('result');
+  const loginLink = document.getElementById('loginLink');
+  const celebration = document.getElementById('celebration');
+  const btn = document.getElementById('spinBtn');
+
+  const prizes = [
+  "₱1,000", "₱5,000", "₱10,000", "₱20,000", "₱50,000", "₱100,000",
+  "₱200,000", "₱300,000", "₱400,000", "₱500,000", "₱2,500", "₱7,500",
+  "₱15,000", "₱30,000", "₱25,000", "₱12,000", "₱18,000", "₱40,000",
+  "₱60,000", "₱80,000"
+];
+
+  const prize = prizes[Math.floor(Math.random() * prizes.length)];
+
+  // Random spin duration between 5s and 7s
+  const spinDuration = Math.floor(Math.random() * (7000 - 5000 + 1)) + 5000;
+
+  // Apply the animation dynamically
+  wheel.style.animation = `spin ${spinDuration / 1000}s ease-out`;
+  btn.disabled = true;
+  btn.innerText = "Spinning...";
+
+  setTimeout(() => {
+    wheel.style.animation = "none";
+    resultText.textContent = `🎉 Congratulations! You won ${prize}!`;
+    resultText.classList.remove('hidden');
+    loginLink.classList.remove('hidden');
+    celebration.classList.remove('hidden'); // Show celebration
+    btn.innerText = "Spin Again";
+    btn.disabled = false;
+  }, spinDuration);
+}
+
+  </script>
+
+</body>
+</html>
